@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 void main() {
@@ -29,18 +31,25 @@ class _MyHomePageState extends State<MyHomePage> {
   List<List<int>> gridInt = List.generate(4, (x) => List.generate(4, (y) => 2));
 
   void addTile() {
+    Random random = new Random();
+    List empty = [];
     for (int x = 0; x < 4; x++) {
       for (int y = 0; y < 4; y++) {
         if (gridInt[x][y] == 0) {
-          gridInt[x][y] = 2;
-          print(gridInt);
-          return;
+          empty.add([x, y]);
         }
       }
     }
+
+    print(empty);
+    int numRandom = random.nextInt(empty.length);
+    int x = empty[numRandom][0];
+    int y = empty[numRandom][1];
+    gridInt[x][y] = 2;
   }
 
   void mergeUp() {
+    bool addCheck = false;
     print('be');
     print(gridInt);
     for (int y = 0; y < 3; y++) {
@@ -48,6 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
         if (gridInt[y][x] == gridInt[y + 1][x]) {
           gridInt[y][x] = gridInt[y][x] + gridInt[y + 1][x];
           gridInt[y + 1][x] = 0;
+          addCheck = true;
         }
       }
     }
@@ -57,6 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
           if (gridInt[y][x] == 0) {
             gridInt[y][x] = gridInt[y + 1][x];
             gridInt[y + 1][x] = 0;
+            addCheck = true;
           }
         }
       }
@@ -65,9 +76,13 @@ class _MyHomePageState extends State<MyHomePage> {
     gridInt.forEach((element) {
       print(element);
     });
+    if (addCheck = true) {
+      addTile();
+    }
   }
 
   void mergeDown() {
+    bool addCheck = false;
     print('be');
     print(gridInt);
     for (int y = 3; y > 0; y--) {
@@ -75,6 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
         if (gridInt[y][x] == gridInt[y - 1][x]) {
           gridInt[y][x] = gridInt[y][x] + gridInt[y - 1][x];
           gridInt[y - 1][x] = 0;
+          addCheck = true;
         }
       }
     }
@@ -84,6 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
           if (gridInt[y][x] == 0) {
             gridInt[y][x] = gridInt[y - 1][x];
             gridInt[y - 1][x] = 0;
+            addCheck = true;
           }
         }
       }
@@ -92,9 +109,14 @@ class _MyHomePageState extends State<MyHomePage> {
     gridInt.forEach((element) {
       print(element);
     });
+
+    if (addCheck = true) {
+      addTile();
+    }
   }
 
   void mergeLeft() {
+    bool addCheck = false;
     print('be');
     print(gridInt);
     for (int y = 0; y < 3; y++) {
@@ -102,6 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
         if (gridInt[x][y] == gridInt[x][y + 1]) {
           gridInt[x][y] = gridInt[x][y] + gridInt[x][y + 1];
           gridInt[x][y + 1] = 0;
+          addCheck = true;
         }
       }
     }
@@ -111,6 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
           if (gridInt[x][y] == 0) {
             gridInt[x][y] = gridInt[x][y + 1];
             gridInt[x][y + 1] = 0;
+            addCheck = true;
           }
         }
       }
@@ -119,9 +143,14 @@ class _MyHomePageState extends State<MyHomePage> {
     gridInt.forEach((element) {
       print(element);
     });
+
+    if (addCheck = true) {
+      addTile();
+    }
   }
 
   void mergeRight() {
+    bool addCheck = false;
     print('be');
     print(gridInt);
     for (int y = 3; y > 0; y--) {
@@ -129,6 +158,7 @@ class _MyHomePageState extends State<MyHomePage> {
         if (gridInt[x][y] == gridInt[x][y - 1]) {
           gridInt[x][y] = gridInt[x][y] + gridInt[x][y - 1];
           gridInt[x][y - 1] = 0;
+          addCheck = true;
         }
       }
     }
@@ -138,6 +168,7 @@ class _MyHomePageState extends State<MyHomePage> {
           if (gridInt[x][y] == 0) {
             gridInt[x][y] = gridInt[x][y - 1];
             gridInt[x][y - 1] = 0;
+            addCheck = true;
           }
         }
       }
@@ -146,6 +177,10 @@ class _MyHomePageState extends State<MyHomePage> {
     gridInt.forEach((element) {
       print(element);
     });
+
+    if (addCheck = true) {
+      addTile();
+    }
   }
 
   @override
@@ -159,9 +194,10 @@ class _MyHomePageState extends State<MyHomePage> {
         stackItems.add(Tile(
           x: tileSize * x[0].x,
           y: tileSize * y.y,
-          value: '${x[0].x} , ${y.y}',
+          value: gridInt[y.y][x[0].x] != 0 ? '${gridInt[y.y][x[0].x]}' : '',
           tileSize: tileSize,
-          color: Colors.brown,
+          color: Color(int.parse(
+              '0xaf59${int.parse('${gridInt[y.y][x[0].x]}', radix: 16) * 5}95')),
         ));
       });
     });
@@ -181,19 +217,27 @@ class _MyHomePageState extends State<MyHomePage> {
             onVerticalDragEnd: (details) {
               if (details.velocity.pixelsPerSecond.dy < -250) {
                 print('up');
-                mergeUp();
+                setState(() {
+                  mergeUp();
+                });
               } else if (details.velocity.pixelsPerSecond.dy > 250) {
                 print('down');
-                mergeDown();
+                setState(() {
+                  mergeDown();
+                });
               }
             },
             onHorizontalDragEnd: (details) {
               if (details.velocity.pixelsPerSecond.dx < -1000) {
                 print('left');
-                mergeLeft();
+                setState(() {
+                  mergeLeft();
+                });
               } else if (details.velocity.pixelsPerSecond.dx > 1000) {
                 print('right');
-                mergeRight();
+                setState(() {
+                  mergeRight();
+                });
               }
             },
             child: Stack(
@@ -227,7 +271,7 @@ class Tile extends StatelessWidget {
         child: Text('$value'),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          color: Colors.brown[200],
+          color: color,
         ),
       ),
     );
