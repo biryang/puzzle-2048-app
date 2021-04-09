@@ -52,6 +52,17 @@ class _MyHomePageState extends State<MyHomePage> {
     bool addCheck = false;
     print('be');
     print(gridInt);
+    for (int n = 0; n < 4; n++) {
+      for (int y = 0; y < 3; y++) {
+        for (int x = 0; x < 4; x++) {
+          if (gridInt[y][x] == 0) {
+            gridInt[y][x] = gridInt[y + 1][x];
+            gridInt[y + 1][x] = 0;
+            addCheck = true;
+          }
+        }
+      }
+    }
     for (int y = 0; y < 3; y++) {
       for (int x = 0; x < 4; x++) {
         if (gridInt[y][x] == gridInt[y + 1][x]) {
@@ -85,6 +96,17 @@ class _MyHomePageState extends State<MyHomePage> {
     bool addCheck = false;
     print('be');
     print(gridInt);
+    for (int n = 0; n < 4; n++) {
+      for (int y = 3; y > 0; y--) {
+        for (int x = 0; x < 4; x++) {
+          if (gridInt[y][x] == 0) {
+            gridInt[y][x] = gridInt[y - 1][x];
+            gridInt[y - 1][x] = 0;
+            addCheck = true;
+          }
+        }
+      }
+    }
     for (int y = 3; y > 0; y--) {
       for (int x = 0; x < 4; x++) {
         if (gridInt[y][x] == gridInt[y - 1][x]) {
@@ -119,6 +141,17 @@ class _MyHomePageState extends State<MyHomePage> {
     bool addCheck = false;
     print('be');
     print(gridInt);
+    for (int n = 0; n < 4; n++) {
+      for (int y = 0; y < 3; y++) {
+        for (int x = 0; x < 4; x++) {
+          if (gridInt[x][y] == 0) {
+            gridInt[x][y] = gridInt[x][y + 1];
+            gridInt[x][y + 1] = 0;
+            addCheck = true;
+          }
+        }
+      }
+    }
     for (int y = 0; y < 3; y++) {
       for (int x = 0; x < 4; x++) {
         if (gridInt[x][y] == gridInt[x][y + 1]) {
@@ -153,6 +186,18 @@ class _MyHomePageState extends State<MyHomePage> {
     bool addCheck = false;
     print('be');
     print(gridInt);
+
+    for (int n = 0; n < 4; n++) {
+      for (int y = 3; y > 0; y--) {
+        for (int x = 0; x < 4; x++) {
+          if (gridInt[x][y] == 0) {
+            gridInt[x][y] = gridInt[x][y - 1];
+            gridInt[x][y - 1] = 0;
+            addCheck = true;
+          }
+        }
+      }
+    }
     for (int y = 3; y > 0; y--) {
       for (int x = 0; x < 4; x++) {
         if (gridInt[x][y] == gridInt[x][y - 1]) {
